@@ -4,10 +4,27 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon",
+    "build": "tsc -b"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dockerode": "^5.0.1",
+    "dotenv": "^16.0.3",
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*",
+    "db": "*",
+    "@types/cors": "^2.8.19",
+    "@types/dockerode": "^4.0.2",
+    "@types/express": "^5.0.6",
+    "@types/node": "^24.19.2",
+    "nodemon": "^3.1.14",
+    "typescript": "^7.0.2"
+  }
 }

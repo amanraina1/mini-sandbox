@@ -1,14 +1,12 @@
 {
   "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
-    "rootDir": "./src",
-    "outDir": "./dist",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "module": "nodenext",
-    "target": "es2020",
-    "moduleResolution": "nodenext"
+    "moduleResolution": "nodenext",
+    "target": "es2022",
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "prisma.config.ts"]
+  "exclude": ["node_modules", "dist"]
 }
