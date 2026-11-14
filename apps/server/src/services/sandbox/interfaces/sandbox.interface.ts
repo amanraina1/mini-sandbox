@@ -11,11 +11,9 @@ export interface SandboxProvider {
 
     deleteContainer(id: string) : Promise<void>
 
-    executeCommand(id: string, command: string): Promise<unknown>
+    startRepl(id: string) : Promise<string>
 
-    startRepl(id: string) : Promise<StartReplInterface>
-
-    stopRepl(id: string) : void;
+    stopRepl(id: string) : Promise<string>;
 
     writeToRepl(id: string, input: string) : void;
 
