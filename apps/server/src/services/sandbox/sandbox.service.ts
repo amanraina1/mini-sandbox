@@ -78,4 +78,18 @@ export class SandboxService {
 
         this.provider.writeToRepl(sessionId, input);
     }
+
+    getReplEmitter(sessionId: string) {
+
+        let emitter = this.provider.getReplEmitter(sessionId);
+
+        if (!emitter) {
+            console.log(
+            `[REPL STREAM] ERROR: Session not found for sessionId: ${sessionId}`
+            );
+            throw new NotFoundError("Session not found")
+        }
+
+        return emitter;
+    }
 }

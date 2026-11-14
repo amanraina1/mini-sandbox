@@ -29,4 +29,14 @@ router.delete('sandbox/repl/:sessionId', sandboxController.stopRepl);
 // write to a repl
 router.post('sandbox/repl/:sessionId/input', sandboxController.writeToRepl);
 
+// SSE preflight request
+router.options("/sandbox/repl/:sessionId/stream", (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  res.status(200).end();
+});
+
+router.get("/sandbox/repl/:sessionId/stream", sandboxController.getEmitter)
+
 export default router;

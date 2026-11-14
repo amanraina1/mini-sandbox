@@ -136,7 +136,14 @@ export class DockerProvider implements SandboxProvider {
     }
 
     getReplEmitter(sessionId: string): EventEmitter | undefined {
-        
+        console.log(`[DOCKER REPL] Getting emitter for sessionId: ${sessionId}`);
+        const session = this.replSessions.get(sessionId);
+        console.log(
+            `[DOCKER REPL] Session found for sessionId ${sessionId}:`,
+            session ? "yes" : "no"
+        );
+        console.log(`[DOCKER REPL] Total active sessions: ${this.replSessions.size}`);
+        return session?.emitter;
     }
 
     cleanTerminalOutput = (data: string): string => {

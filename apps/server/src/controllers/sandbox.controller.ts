@@ -142,4 +142,64 @@ export class SandboxController {
             });
         }
     }
+
+    getEmitter = async (req: Request, res: Response) => {
+
+        const sessionId = req.params.sessionId?.toString();
+
+        const emitter = this.sandboxService.getReplEmitter(sessionId!);
+
+        // Set basic CORS headers for SSE
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+        res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+        // Set SSE headers
+        res.setHeader("Content-Type", "text/event-stream");
+        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        res.setHeader("Connection", "keep-alive");
+        res.setHeader("X-Accel-Buffering", "no"); // Disable nginx buffering
+
+        res.write('data: {"type": "connected"}\n\n');
+
+        const outputHandler = (data: string) => {
+            console.log(
+            `[REPL STREAM] Output received for sessionId ${sessionId}:`,
+            data
+            );
+            res.write(`data: ${JSON.stringify({ type: "output", data })}\n\n`);
+        };
+
+        const endHandler = () => {
+            console.log(`[REPL STREAM] End event received for sessionId: ${sessionId}`);
+            res.write('data: {"type": "end"}\n\n');
+            res.end();
+        };
+
+        emitter.on("output", outputHandler);
+        emitter.on("end", endHandler);
+
+        res.on("close", () => {
+            console.log(`[REPL STREAM] Connection closed for sessionId: ${sessionId}`);
+            emitter.off("output", outputHandler);
+            emitter.off("end", endHandler);
+        });
+
+        res.on("error", (error) => {
+            console.error(
+            `[REPL STREAM] Connection error for sessionId ${sessionId}:`,
+            error
+            );
+            emitter.off("output", outputHandler);
+            emitter.off("end", endHandler);
+        });
+
+        req.on("close", () => {
+            console.log(
+            `[REPL STREAM] Client disconnected for sessionId: ${sessionId}`
+            );
+            emitter.off("output", outputHandler);
+            emitter.off("end", endHandler);
+        });
+    }
 }
