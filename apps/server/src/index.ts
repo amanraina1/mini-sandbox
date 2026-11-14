@@ -1,15 +1,15 @@
 import express from "express";
 import cors from "cors";
 import sandboxRoutes from "./routes/sandbox.route.ts"
+import { env } from "./config/env.ts"
 
 const app = express();
 
 app.use(express.json())
 app.use(cors())
 
-app.use("/api/v1", sandboxRoutes)
+app.use("/api/v1/sandbox", sandboxRoutes)
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server is listening at PORT: ${PORT}`)
+app.listen(env.PORT, () => {
+    console.log(`Server running on port ${env.PORT} using [${env.SANDBOX_PROVIDER}] provider`);
 });
