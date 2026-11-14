@@ -86,4 +86,60 @@ export class SandboxController {
             });
         }
     };
+
+    stopRepl = async (req: Request, res: Response) => {
+
+        const sessionId = req.params.sessionId?.toString();
+
+        try {
+
+            if(!sessionId) {
+                res.status(401).json({ message: "no session id shared", success: false });
+                return;
+            }
+
+            this.sandboxService.stopRepl(sessionId)
+            
+            res.json({ success: true, message: "REPL stopped successfully" });
+
+        } catch (err) {
+
+            console.log(err);
+
+            res.status(400).json({ err, success: false, message: "Failed to stop REPL" });
+        }
+    };
+
+    writeToRepl = async (req: Request, res: Response) => {
+        const sessionId = req.params.sessionId?.toString();
+        const { input } = req.body;
+        console.log(`[REPL INPUT] Received input for sessionId: ${sessionId}, input: "${input}"`);
+
+        try {
+            if (!input) {
+                console.log(`[REPL INPUT] ERROR: No input provided for sessionId: ${sessionId}`);
+                res.status(400).json({ message: "Input is required", success: false });
+                return;
+            }
+
+            if (!sessionId) {
+                console.log('[REPL INPUT] ERROR: No session id provided');
+                res.status(400).json({ message: "Session Id is required", success: false });
+                return;
+            }
+
+            console.log(`[REPL INPUT] Writing input to REPL for sessionId: ${sessionId}`);
+            this.sandboxService.writeToRepl(sessionId, input)
+            console.log(`[REPL INPUT] Input written successfully for sessionId: ${sessionId}`);
+
+            res.json({ success: true, message: "Input sent successfully" });
+        } catch (err) {
+            console.error(`[REPL INPUT] ERROR for sessionId ${sessionId}:`, err);
+            res.status(400).json({
+            err: err instanceof Error ? err.message : err,
+            success: false,
+            message: "Failed to send input",
+            });
+        }
+    }
 }

@@ -18,9 +18,15 @@ router.get('/', sandboxController.getContainers);
 router.post('/', sandboxController.createContainer);
 
 // delete a sandbox
-router.delete('/:id', sandboxController.deleteContainer)
+router.delete('/:id', sandboxController.deleteContainer);
 
 // start a repl
-router.post('sandbox/:id/repl/start', sandboxController.)
+router.post('sandbox/:id/repl/start', sandboxController.startRepl);
+
+// stop a repl
+router.delete('sandbox/repl/:sessionId', sandboxController.stopRepl);
+
+// write to a repl
+router.post('sandbox/repl/:sessionId/input', sandboxController.writeToRepl);
 
 export default router;

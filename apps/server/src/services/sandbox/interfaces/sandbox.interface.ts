@@ -13,7 +13,7 @@ export interface SandboxProvider {
 
     startRepl(id: string) : Promise<string>
 
-    stopRepl(id: string) : Promise<string>;
+    stopRepl(id: string) : void;
 
     writeToRepl(id: string, input: string) : void;
 

@@ -68,4 +68,14 @@ export class SandboxService {
 
         return sessionId;
     }
+
+    stopRepl(sessionId: string) {
+
+        this.provider.stopRepl(sessionId);
+    }
+
+    async writeToRepl(sessionId: string, input: string) {
+
+        this.provider.writeToRepl(sessionId, input);
+    }
 }

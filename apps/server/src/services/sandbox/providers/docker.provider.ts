@@ -106,18 +106,33 @@ export class DockerProvider implements SandboxProvider {
             return sessionId;
 
         } catch (err) {
-            
+
             console.error(`[DOCKER REPL] Error starting REPL for container ${id}:`, err);
             throw err;
         }
     }
 
-    stopRepl(id: string): void {
-        
+    stopRepl(sessionId: string): void {
+
+        const session = this.replSessions.get(sessionId);
+
+        if (!session) return;
+
+        session.stream.end();
+
+        this.replSessions.delete(sessionId);
     }
 
     writeToRepl(id: string, input: string): void {
         
+        const session = this.replSessions.get(id);
+
+        if (!session) {
+            console.error(`[DOCKER REPL] Session not found for sessionId: ${session}`);
+            throw new Error("REPL session not found");
+        }
+
+        session.stream.write(input + "\n");
     }
 
     getReplEmitter(sessionId: string): EventEmitter | undefined {
